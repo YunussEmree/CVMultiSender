@@ -1,1 +1,5 @@
 services:
+  app:
+    image: your-image-name
+    ports:
+      - "8080:8080"
