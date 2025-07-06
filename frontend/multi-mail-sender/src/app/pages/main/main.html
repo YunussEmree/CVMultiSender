@@ -1,0 +1,116 @@
+<div class="container py-4 fade-in">
+
+  <!-- Başlık -->
+  <h2 class="mb-4 gradient-text fade-down">Multi Mail Sender</h2>
+
+  <!-- Kullanıcı Bilgileri -->
+  <div class="mb-3">
+    <label>Email (Username)</label>
+    <input type="email"
+           class="form-control form-control-custom"
+           [(ngModel)]="request.username"
+           placeholder="example@gmail.com" />
+  </div>
+  <div class="mb-3">
+    <label>App Password</label> <!-- TODO: Information text will be created in here  -->
+    <input type="password"
+           class="form-control form-control-custom"
+           [(ngModel)]="request.password"
+           placeholder="App Password" />
+  </div>
+
+  <!-- Konu ve Body -->
+  <div class="mb-3">
+    <label>Subject</label>
+    <input type="text"
+           class="form-control form-control-custom"
+           [(ngModel)]="request.subject" />
+  </div>
+  <div class="mb-3">
+    <label>Body Draft</label>
+    <textarea rows="5"
+              class="form-control form-control-custom"
+              [(ngModel)]="request.bodydraft"
+              placeholder="Dear {{ '{' }}companyName{{ '}' }}, ..."></textarea>
+    <small class="text-muted">
+      Kullanabileceğin placeholderlar:
+      {{ '{' }}companyName{{ '}' }}, {{ '{' }}companyNumber{{ '}' }}, vb.
+    </small>
+  </div>
+
+  <!-- Şirket Listesi -->
+  <h5>Companies</h5>
+  <div *ngFor="let company of request.companyData; let i = index"
+       class="card mb-3 animated-card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      Company {{ (i | addOne) }}
+      <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="removeCompany(i)"></button>
+    </div>
+    <div class="card-body">
+      <div class="mb-2">
+        <label>Company Mail</label>
+        <input type="email"
+               class="form-control form-control-custom"
+               [(ngModel)]="company.companyMail" />
+      </div>
+       <div *ngFor="let key of getParameterKeys(company); let idx = index"
+      class="d-flex align-items-center mb-2">
+   <!-- Anahtar sabit, sadece değeri düzenlenebilir -->
+   <label class="me-2">{{ key }}</label>
+   <input type="text"
+          class="form-control me-2 form-control-custom"
+          [(ngModel)]="company.parameters[key]"
+          placeholder="Parametre Değeri" />
+   <button type="button"
+           class="btn btn-danger btn-sm btn-animate"
+           (click)="removeParameter(company, key)">Sil</button>
+ </div>
+
+      <button type="button" class="btn btn-secondary btn-sm btn-animate"
+              (click)="addParameter(company)">+ Yeni Parametre</button>
+    </div>
+  </div>
+
+  <button class="btn btn-outline-primary mb-3 btn-animate"
+          (click)="addCompany()">+ Yeni Şirket Ekle</button>
+
+  <!-- PDF Upload -->
+  <div class="mb-3">
+    <label>PDF Attachment</label>
+    <input type="file"
+           class="form-control form-control-custom"
+           (change)="onFileSelected($event)" multiple />
+  </div>
+
+  <!-- Gönder Butonu -->
+  <div class="mb-4">
+    <button class="btn btn-success w-100 btn-animate" (click)="sendMails()">
+      Gönder
+    </button>
+  </div>
+
+  <!-- Sonuç Alert -->
+  <div *ngIf="responseMessage" class="alert mt-3"
+       [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}">
+    {{ responseMessage }}
+  </div>
+
+  <!-- Alt Bilgi -->
+  <div class="fixed-bottom d-flex align-items-center p-3 bg-light border-top">
+    <div>
+      <strong>Sunucu Durumu:</strong>
+      <span [ngClass]="serverStatus==='Service is running' ? 'text-success' : 'text-danger'">
+        {{ serverStatus }}
+      </span>
+    </div>
+    <button class="btn mx-3 btn-outline-info btn-animate" (click)="checkServer()">
+      Sunucu Durumunu Kontrol Et
+    </button>
+
+    <button class="btn btn-outline-secondary btn-animate" (click)="testRequest()">
+      Kendine Test Gönder
+    </button>
+
+  </div>
+
+</div>
