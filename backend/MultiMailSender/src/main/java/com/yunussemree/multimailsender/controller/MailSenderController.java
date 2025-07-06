@@ -3,10 +3,13 @@ package com.yunussemree.multimailsender.controller;
 import com.yunussemree.multimailsender.model.ApiResponse;
 import com.yunussemree.multimailsender.model.Request;
 import com.yunussemree.multimailsender.service.MailSenderService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class MailSenderController {
@@ -52,6 +55,21 @@ public class MailSenderController {
             return ResponseEntity.badRequest().body(new ApiResponse("Error expected", e.getMessage()));
         }
     }
+
+    @PostMapping(value = "/send-mails-with-attachment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse> sendMails(
+            @RequestPart("request") Request request,
+            @RequestPart("files") MultipartFile[] files
+    ) {
+        try {
+            mailSenderService.sendEmailsWithAttachments(request, files);
+            return ResponseEntity.ok(new ApiResponse("Mails sent successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse("Error expected", e.getMessage()));
+        }
+
+    }
+
 
     /**
      * Health check endpoint to verify if the service is running.
