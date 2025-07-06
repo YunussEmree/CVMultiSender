@@ -8,9 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-
 @RestController
 public class MailSenderController {
 
@@ -56,6 +53,12 @@ public class MailSenderController {
         }
     }
 
+     /**     * Endpoint to send multiple emails with attachments based on the provided request.
+     *
+     * @param request The request containing email details and company data.
+     * @param files   The files to be attached to the emails.
+     * @return ResponseEntity with a message indicating success or failure.
+     */
     @PostMapping(value = "/send-mails-with-attachment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> sendMails(
             @RequestPart("request") Request request,
