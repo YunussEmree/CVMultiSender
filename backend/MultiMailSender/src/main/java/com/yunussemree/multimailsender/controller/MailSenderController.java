@@ -1,13 +1,14 @@
 package com.yunussemree.multimailsender.controller;
 
 import com.yunussemree.multimailsender.model.ApiResponse;
+import com.yunussemree.multimailsender.model.Request;
 import com.yunussemree.multimailsender.service.MailSenderService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.HashMap;
+
+@RestController
 public class MailSenderController {
 
     private final MailSenderService mailSenderService;
@@ -17,23 +18,48 @@ public class MailSenderController {
     }
 
 
-    @GetMapping("/mail-sender")
-    public ResponseEntity<ApiResponse> mailSender(@RequestParam String to, @RequestParam String subject, @RequestParam String body, @RequestParam String username, @RequestParam String password) {
-        try{
-            if (to == null || subject == null || body == null || username == null || password == null) {
-                return ResponseEntity.badRequest().body(new ApiResponse("All fields are required", null));
-            } else if(!to.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") || !username.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                    return ResponseEntity.badRequest().body(new ApiResponse("Invalid email format", null));
-            } else if (subject.length() > 25500) {
-                return ResponseEntity.badRequest().body(new ApiResponse("Subject is too long", null));
-            } else if (body.length() > 1000) {
-                return ResponseEntity.badRequest().body(new ApiResponse("Body is too long", null));
-            } else {
-                mailSenderService.sendEmail(to, subject, body, username, password);
-                return ResponseEntity.ok(new ApiResponse("Mail sent successfully to: " + to, null));
-            }
+    /**
+     * Endpoint to send a test email.
+     *
+     * @param subject  The subject of the email.
+     * @param body     The body content of the email.
+     * @param username The username for authentication and the recipient's email address.
+     * @param password The password for authentication.
+     * @return ResponseEntity with a message indicating success or failure.
+     */
+    @GetMapping("/test")
+    public ResponseEntity<ApiResponse> sendMail(@RequestParam String subject, @RequestParam String body, @RequestParam String username, @RequestParam String password) {
+        try {
+            mailSenderService.sendEmail(username, subject, body, username, password);
+            return ResponseEntity.ok(new ApiResponse("Mail sent successfully to: " + username, null));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ApiResponse("Error expected", e.getMessage()));
         }
+    }
+
+    /**
+     * Endpoint to send multiple emails based on the provided request.
+     *
+     * @param request The request containing email details and company data.
+     * @return ResponseEntity with a message indicating success or failure.
+     */
+    @PostMapping("/send-mails")
+    public ResponseEntity<ApiResponse> sendMails(@RequestBody Request request) {
+        try {
+            mailSenderService.sendEmails(request);
+            return ResponseEntity.ok(new ApiResponse("Mails sent successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse("Error expected", e.getMessage()));
+        }
+    }
+
+    /**
+     * Health check endpoint to verify if the service is running.
+     *
+     * @return ResponseEntity with a message indicating the service status.
+     */
+    @GetMapping("/health")
+    public ResponseEntity<ApiResponse> healthCheck() {
+        return ResponseEntity.ok(new ApiResponse("Service is running", null));
     }
 }

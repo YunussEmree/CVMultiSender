@@ -1,13 +1,31 @@
 package com.yunussemree.multimailsender.model;
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 @Data
 public class CompanyData {
+
+    @Min(0)
+    @NotNull
     private int id;
+
+    @NotNull
+    @Email
     private String companyMail;
-    private ArrayList<String> parameters;
+
+    private HashMap<String, String> parameters;
 }
-//{"id":0, "companyMail": "company0@gmail.com", "parameters": ["companyName": "company0", "companyNumber": "1234567890"]}
+
+/*
+{
+            "id": 1,
+            "companyMail": "company1@gmail.com",
+            "parameters": {
+                "companyName": "company1",
+                "companyNumber": "0987654321"
+            }
+        }
+ */

@@ -1,11 +1,32 @@
 {
-    "username": "example@gmail.com",
-    "password": "examplePassword",
-    "subject": "Internship Application - Yunus Emre Şenyiğit",
-    "bodydraft": "Dear Hiring Manager,\\n\\nI am writing to express my interest in the internship position at your {companyName} company. I called you but you didn't answer on this number: {companyNumber}\\n\\nBest regards,\\nYunus Emre Şenyiğit",
-    "data": [
-        {"id":0, "companyMail": "company0@gmail.com", "parameters": {"companyName": "company0", "companyNumber": "1234567890"}},
-        {"id":1, "companyMail": "company1@gmail.com", "companyName": "company1"},
-        {"id":2, "companyMail": "company2@gmail.com", "companyName": "company2"}
-    ]
+  "username": "example@gmail.com",
+  "password": "examplePassword",
+  "subject": "Internship Application - Yunus Emre Şenyiğit",
+  "bodydraft": "Dear Hiring Manager,\n\nI am writing to express my interest in the internship position at your {companyName} company. I called you but you didn't answer on this number: {companyNumber}\n\nBest regards,\nYunus Emre Şenyiğit",
+  "companyData": [
+    {
+      "id": 0,
+      "companyMail": "company0@gmail.com",
+      "parameters": {
+        "companyName": "company0",
+        "companyNumber": "1234567890"
+      }
+    },
+    {
+      "id": 1,
+      "companyMail": "company1@gmail.com",
+      "parameters": {
+        "companyName": "company1",
+        "companyNumber": "0987654321"
+      }
+    },
+    {
+      "id": 2,
+      "companyMail": "company2@gmail.com",
+      "parameters": {
+        "companyName": "company2",
+        "companyNumber": "5554443322"
+      }
+    }
+  ]
 }
