@@ -1,45 +1,60 @@
-<div class="container py-4 fade-in">
+<div class="container py-4">
 
-  <!-- Başlık -->
-  <h2 class="mb-4 gradient-text fade-down">Multi Mail Sender</h2>
+  <h2 class="mb-4 gradient-text fade-down text-center">Multi Mail Sender</h2>
 
-  <!-- Kullanıcı Bilgileri -->
-  <div class="mb-3">
-    <label>Email (Username)</label>
+  <div class="mb-3 d-flex align-items-center">
+    <label class="me-2 w-25">Email (Username)</label>
     <input type="email"
-           class="form-control form-control-custom"
+           class="form-control form-control-custom flex-grow-1"
            [(ngModel)]="request.username"
            placeholder="example@gmail.com" />
+    <i class="bi bi-exclamation-circle-fill text-primary ms-2 info-icon"
+       ngbTooltip="Your Gmail address. This is used to send emails."
+       placement="right"></i>
   </div>
-  <div class="mb-3">
-    <label>App Password</label> <!-- TODO: Information text will be created in here  -->
+
+  <div class="mb-3 d-flex align-items-center">
+    <label class="me-2 w-25">App Password</label>
     <input type="password"
-           class="form-control form-control-custom"
+           class="form-control form-control-custom flex-grow-1"
            [(ngModel)]="request.password"
            placeholder="App Password" />
+    <i class="bi bi-exclamation-circle-fill text-primary ms-2 info-icon"
+       ngbTooltip="You need to create an App Password in your Google Account settings. 
+                    This is different from your regular password."
+       placement="right"></i>
   </div>
 
-  <!-- Konu ve Body -->
-  <div class="mb-3">
-    <label>Subject</label>
+  <div class="mb-3 d-flex align-items-center">
+    <label class="me-2 w-25">Subject</label>
     <input type="text"
-           class="form-control form-control-custom"
-           [(ngModel)]="request.subject" />
-  </div>
-  <div class="mb-3">
-    <label>Body Draft</label>
-    <textarea rows="5"
-              class="form-control form-control-custom"
-              [(ngModel)]="request.bodydraft"
-              placeholder="Dear {{ '{' }}companyName{{ '}' }}, ..."></textarea>
-    <small class="text-muted">
-      Kullanabileceğin placeholderlar:
-      {{ '{' }}companyName{{ '}' }}, {{ '{' }}companyNumber{{ '}' }}, vb.
-    </small>
+           class="form-control form-control-custom flex-grow-1"
+           [(ngModel)]="request.subject" 
+           placeholder="Mail Subject" />
+    <i class="bi bi-exclamation-circle-fill text-primary ms-2 info-icon"
+       ngbTooltip="E-mail subject."
+       placement="right"></i>
   </div>
 
-  <!-- Şirket Listesi -->
-  <h5>Companies</h5>
+  <div class="mb-3 position-relative">
+    <div class="d-flex align-items-start">
+      <label class="w-25">Body Draft</label>
+      <textarea rows="5"
+                class="form-control form-control-custom flex-grow-1"
+                [(ngModel)]="request.bodydraft"
+                placeholder="Dear {{ '{' }}companyName{{ '}' }}, ..."></textarea>
+                
+    </div>
+    <i class="bi bi-exclamation-circle-fill text-primary info-icon-textarea"
+       ngbTooltip="Mail body draft. You can use placeholders like {{ '{' }}companyName{{ '}' }} etc. to personalize the emails. 
+                    The placeholders will be replaced with the actual values from the placeholders."
+       placement="right"></i>
+  </div>
+  
+      
+  <h5>Companies <i class="bi bi-exclamation-circle-fill text-secondary info-icon-textarea"
+       ngbTooltip="You can add your mail here for testing"
+       placement="right"></i></h5> 
   <div *ngFor="let company of request.companyData; let i = index"
        class="card mb-3 animated-card">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -55,26 +70,24 @@
       </div>
        <div *ngFor="let key of getParameterKeys(company); let idx = index"
       class="d-flex align-items-center mb-2">
-   <!-- Anahtar sabit, sadece değeri düzenlenebilir -->
    <label class="me-2">{{ key }}</label>
    <input type="text"
           class="form-control me-2 form-control-custom"
           [(ngModel)]="company.parameters[key]"
-          placeholder="Parametre Değeri" />
+          placeholder="Parameter value" />
    <button type="button"
            class="btn btn-danger btn-sm btn-animate"
-           (click)="removeParameter(company, key)">Sil</button>
+           (click)="removeParameter(company, key)">Delete</button>
  </div>
 
       <button type="button" class="btn btn-secondary btn-sm btn-animate"
-              (click)="addParameter(company)">+ Yeni Parametre</button>
+              (click)="addParameter(company)">+ New parameter</button>
     </div>
   </div>
 
   <button class="btn btn-outline-primary mb-3 btn-animate"
-          (click)="addCompany()">+ Yeni Şirket Ekle</button>
+          (click)="addCompany()">+ Add new company</button>
 
-  <!-- PDF Upload -->
   <div class="mb-3">
     <label>PDF Attachment</label>
     <input type="file"
@@ -82,35 +95,27 @@
            (change)="onFileSelected($event)" multiple />
   </div>
 
-  <!-- Gönder Butonu -->
   <div class="mb-4">
     <button class="btn btn-success w-100 btn-animate" (click)="sendMails()">
-      Gönder
-    </button>
-  </div>
+      Send Mails
+    </button> 
+  </div> 
 
-  <!-- Sonuç Alert -->
   <div *ngIf="responseMessage" class="alert mt-3"
-       [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}">
-    {{ responseMessage }}
+       [ngClass]="{'alert-success': isSuccess==1, 'alert-danger': isSuccess==-1, 'alert-info': isSuccess==0}">
+    {{ responseMessage }} <!-- ! Required files will be edited-->
   </div>
 
-  <!-- Alt Bilgi -->
   <div class="fixed-bottom d-flex align-items-center p-3 bg-light border-top">
     <div>
-      <strong>Sunucu Durumu:</strong>
-      <span [ngClass]="serverStatus==='Service is running' ? 'text-success' : 'text-danger'">
+      <strong>Server Status:</strong>
+      <span [ngClass]="serverStatus==='Server is running' ? 'text-success' : 'text-danger'">
         {{ serverStatus }}
       </span>
     </div>
     <button class="btn mx-3 btn-outline-info btn-animate" (click)="checkServer()">
-      Sunucu Durumunu Kontrol Et
-    </button>
-
-    <button class="btn btn-outline-secondary btn-animate" (click)="testRequest()">
-      Kendine Test Gönder
+      Check Server Status
     </button>
 
   </div>
-
 </div>

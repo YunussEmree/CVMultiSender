@@ -12,13 +12,14 @@ interface CompanyData {
   parameters: Record<string, string>;
 }
 
-interface RequestModel {
+interface RequestData {
   username: string;
   password: string;
   subject: string;
   bodydraft: string;
   companyData: CompanyData[];
 }
+
 
 @Component({
   selector: 'app-main',
@@ -29,7 +30,7 @@ interface RequestModel {
   styleUrls: ['./main.css']
 })
 export class MainComponent {
-  request: RequestModel = {
+  request: RequestData = {
     username: '',
     password: '',
     subject: '',
@@ -47,10 +48,12 @@ export class MainComponent {
 
   files: File[] = [];
   responseMessage = '';
-  isSuccess = false;
-  serverStatus = 'Bağlantı durumu kontrol edilmedi';
+  isSuccess = 0; // 0: sending, 1: success, -1: error
+  serverStatus = 'Server Down';
 
-  constructor(private mailService: MailSenderService) {}
+  constructor(private mailService: MailSenderService) {
+    this.checkServer();
+  }
 
   addCompany() {
     this.request.companyData.push({
@@ -60,7 +63,7 @@ export class MainComponent {
     });
   }
 
-   getParameterKeys(company: CompanyData): string[] {
+  getParameterKeys(company: CompanyData): string[] {
     return Object.keys(company.parameters);
   }
 
@@ -69,15 +72,10 @@ export class MainComponent {
   }
 
    addParameter(company: CompanyData) {
-    const key = window.prompt('Yeni parametre adı girin:');
+    const key = window.prompt('Add new parameter:');
     if (key && !company.parameters.hasOwnProperty(key)) {
       company.parameters[key] = '';
     }
-  }
-
-  testRequest() {
-    // TODO: This method will be implemented later
-    // ! This request is for testing mail sending functionality with the current data to the user's own email
   }
 
   removeParameter(company: CompanyData, key: string) {
@@ -92,18 +90,18 @@ export class MainComponent {
   }
 
   sendMails() {
-    this.responseMessage = 'Gönderiliyor…';
-    this.isSuccess = false;
+    this.responseMessage = 'Mails are sending...';
+    this.isSuccess = 0;
     this.mailService
       .sendMailsWithAttachment(this.request, this.files)
       .subscribe({
         next: res => {
           this.responseMessage = res.message;
-          this.isSuccess = true;
+          this.isSuccess = 1;
         },
         error: err => {
-          this.responseMessage = err.error?.message || 'Bir hata oluştu';
-          this.isSuccess = false;
+          this.responseMessage = err.error?.message || 'An error occurred while sending emails.';
+          this.isSuccess = -1;
         }
       });
   }
@@ -111,7 +109,7 @@ export class MainComponent {
   checkServer() {
     this.mailService.checkServer().subscribe({
       next: res => this.serverStatus = res.message,
-      error: () => this.serverStatus = 'Sunucuya bağlanılamadı'
+      error: () => this.serverStatus = 'Server Down'
     });
   }
 }

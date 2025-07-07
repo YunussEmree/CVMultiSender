@@ -1,15 +1,14 @@
-/* Genel Container & Arka Plan */
+
 .container {
   max-width: 800px;
   background: #f0f4f8;
-  padding-bottom: 80px; /* footer üstü boşluk */
+  padding-bottom: 80px;
   border-radius: 8px;
   margin-top: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   margin-bottom: 60px;
 }
 
-/* Özel Input Stili */
 .form-control-custom {
   border-radius: 4px;
   transition: box-shadow 0.3s ease;
@@ -18,13 +17,25 @@
   box-shadow: 0 0 8px rgba(74,144,226,0.5);
 }
 
-/* Title Gradient ve Animasyon */
 .gradient-text {
   background: linear-gradient(90deg, #4a90e2, #50e3c2);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
+
+.gradient-text::after {
+  content: '';
+  display: block;
+  width: 260px;
+  height: 4px;
+  background: linear-gradient(90deg, #4a90e2, #50e3c2);
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
@@ -40,7 +51,6 @@
   animation: fadeDown 0.6s ease-out;
 }
 
-/* Kart Animasyon & Hover */
 .animated-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -49,25 +59,61 @@
   box-shadow: 0 12px 24px rgba(0,0,0,0.1);
 }
 
-/* Buton Hover Efekti */
 .btn-animate {
   transition: transform 0.2s ease, background-color 0.3s ease;
 }
 .btn-animate:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
-/* Close Button Beyaza Çevir */
 .btn-close-white {
   filter: invert(1);
 }
 
-/* Footer Z-Index */
 .fixed-bottom {
   z-index: 1030;
 }
 
-/* Title ve sayfa boşluğu için */
 h2.mb-4 {
   margin-bottom: 1.5rem;
 }
+
+.info-icon, .info-icon-textarea {
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.info-icon:hover,
+.info-icon-textarea:hover {
+  color: #0056b3;
+}
+
+.position-relative {
+  margin-bottom: 0.25rem;
+}
+
+.position-relative .info-icon-textarea {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.ps-25 {
+  padding-left: calc(25% + 0.75rem);
+}
+.form-control {
+  padding-right: 2.5rem;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #4a90e2;
+}
+
+.form-control::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+  

@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+body {
+  background:
+    linear-gradient(135deg, rgba(16, 110, 219, 0.2), rgba(80,227,194,0.2));
+  background-size: auto, cover;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
