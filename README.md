@@ -2,6 +2,8 @@
 
 MultiMailSender is an open-source bulk email sending application with a modern Angular-based frontend and a robust Spring Boot backend. It allows you to send personalized emails to multiple recipients, each with custom parameters and optional attachments.
 
+![image](https://github.com/user-attachments/assets/2166bd99-db4a-401a-bc18-c9f11e82c905)
+
 ## Features
 
 - Bulk email sending with per-recipient personalization
