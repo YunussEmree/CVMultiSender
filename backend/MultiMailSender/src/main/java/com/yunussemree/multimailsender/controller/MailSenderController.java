@@ -16,43 +16,7 @@ public class MailSenderController {
     public MailSenderController(MailSenderService mailSenderService) {
         this.mailSenderService = mailSenderService;
     }
-
-
-    /**
-     * Endpoint to send a test email.
-     *
-     * @param subject  The subject of the email.
-     * @param body     The body content of the email.
-     * @param username The username for authentication and the recipient's email address.
-     * @param password The password for authentication.
-     * @return ResponseEntity with a message indicating success or failure.
-     */
-    @GetMapping("/test")
-    public ResponseEntity<ApiResponse> sendMail(@RequestParam String subject, @RequestParam String body, @RequestParam String username, @RequestParam String password) {
-        try {
-            mailSenderService.sendEmail(username, subject, body, username, password);
-            return ResponseEntity.ok(new ApiResponse("Mail sent successfully to: " + username, null));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse("Error expected", e.getMessage()));
-        }
-    }
-
-    /**
-     * Endpoint to send multiple emails based on the provided request.
-     *
-     * @param request The request containing email details and company data.
-     * @return ResponseEntity with a message indicating success or failure.
-     */
-    @PostMapping("/send-mails")
-    public ResponseEntity<ApiResponse> sendMails(@RequestBody Request request) {
-        try {
-            mailSenderService.sendEmails(request);
-            return ResponseEntity.ok(new ApiResponse("Mails sent successfully", null));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse("Error expected", e.getMessage()));
-        }
-    }
-
+    
      /**     * Endpoint to send multiple emails with attachments based on the provided request.
      *
      * @param request The request containing email details and company data.
@@ -73,7 +37,6 @@ public class MailSenderController {
 
     }
 
-
     /**
      * Health check endpoint to verify if the service is running.
      *
@@ -81,6 +44,6 @@ public class MailSenderController {
      */
     @GetMapping("/health")
     public ResponseEntity<ApiResponse> healthCheck() {
-        return ResponseEntity.ok(new ApiResponse("Service is running", null));
+        return ResponseEntity.ok(new ApiResponse("Server is running", null));
     }
 }
